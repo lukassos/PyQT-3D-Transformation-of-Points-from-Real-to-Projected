@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <title>Instalation in few steps</title>
+    
+  </head>
+  <body> 
+  <h2>Ako rozbehat transformacny softik (FREE a Licencovane)</h2>
+  
+<ol>  
+
+<hr>
+<li><h3>Download Python For Windows</h3>
+	  <p>Podla typu procesora si vyber verziu SW (<a href=https://www.python.org/">https://www.python.org/</a>)</p>
+      <ul>
+        <li style="margin-right: 10px;color: red">
+          <a href="https://www.python.org/ftp/python/3.4.2/python-3.4.2.amd64.msi" >Python 64 bit</a></li>
+        <li style="margin-right: 10px;color: red">
+          <a href="https://www.python.org/ftp/python/3.4.2/python-3.4.2.msi" >Python 32 bit</a></li>
+        
+      </ul> 
+	  </li>
+ 
+<hr>
+<li><h3>Install Python</h3>
+	  <p>Tento krok bude asi chvilku trvat tak po spusteni si kludne daj robit caj</p>
+      
+	  </li>
+	
+<hr>  
+<li><h3>Download PyQT5 For Windows</h3>
+	  <p>Podla typu procesora si vyber verziu SW (<a href=https://wiki.python.org/moin/PyQt">https://wiki.python.org/moin/PyQt</a>)</p>
+      <ul>
+        <li style="margin-right: 10px;color: red">
+          <a href="http://sourceforge.net/projects/pyqt/files/PyQt5/PyQt-5.3.2/PyQt5-5.3.2-gpl-Py3.4-Qt5.3.1-x64.exe" >PyQt5 64 bit</a></li>
+        <li style="margin-right: 10px;color: red">
+          <a href="http://sourceforge.net/projects/pyqt/files/PyQt5/PyQt-5.3.2/PyQt5-5.3.2-gpl-Py3.4-Qt5.3.1-x32.exe" >PyQt5 32 bit</a></li>
+        
+      </ul> 
+	  </li>
+	
+<hr>  
+<li><h3>Install PyQT5</h3>
+	  <p>Kludne si mozes ist ten caj zaliat :D dat ho na balkon vychladnut</p>
+	  
+	  </li>
+	  
+	
+<hr>  
+<li><h3>Nastavenie systemu a doinstalovanie matematickeho balika NumPy</h3>
+	  <p>Na dalsie kroky mame skript <q>install_ver34.bat</q>, spusti ho bez admin prav. Ak nepojde dvoj-klikom tak cez konzolu (klavesova skratka "Win+R", potom cmd.exe, potom klik OK).</p>
+	  <h4>Chystame sa spustit tieto prikazy</h4>
+<blockquote>setx path "%PATH%;C:\Python34;C:\Python34\Scripts;C:\Python34\Lib\site-packages\PyQt5" <br/>
+assoc .py=Python.File <br/>
+ftype Python.File=C:\Python34\pythonw.exe "%1" %* <br/>
+pip install numpy <br/>
+</blockquote>
+	  </li>
+	  
+	  
+<hr>  
+<li><h3>Spustenie programu</h3>
+	  <p>Program sa spysta cez <q>start.py</q>, co vyvola Qt5 generovane okno (s malymi upravami to je kompatibilne aj s linuxom ;-) )</p>
+	  
+	  </li>
+<hr>  
+<li><h3>Praca s programom</h3>
+	
+	<ul>
+	<li>
+	<h4>Vstupy</h4>
+	  <p>Vstupom su dva textove subory s formatom "ID_bodu X_suradnica Y_suradnica Z_suradnica"(oddelovacom je jedna alebo viac medzier/tabulatorov, takyto subor mozno vygenerovat aj z Excelu). Jeden subor predstavuje predlohu (v programe ako "Predloha")a druhy namerane udaje v realite (v programe ako "Meranie"). Vstupne subory Vstupy mozno najst cez tlacitka "Hladat" alebo iba nakopirovat vhodne formatovany vstup do textovych casti im prisluchajucih. Textove casti su interaktivne s podporou historie, drag and drop a aktivne obnovuju tabulku pre vyber Zachytnych bodov. Ak su do textovych casti prenesene subory z prehliadaca suborov vo Windows, adresa je nacitana ako textovy subor (to ta drag and drop funkcia).
+	  </p>
+	  
+	  </li>
+	<li>
+	<h4>Zachytne body</h4>
+	  <p>Zachytne body sluzia na vypocet transformacie medzi priestormi bodov Predlohy a Merania. Body su v tabulke automaticky zoradene podla ID. Zobrazene body prisluchaju bodom z merania. Vyberom riadkov (Tlacidlo "Vyber vsetky" alebo po jednom mysou pri drzani ctrl "Ctrl+LeftClick") v tabulke sa urci, ktore body zo spolocnych budu pouzite ako Zachytne. Minimalny pocet Zachytnych bodov je #ZATIAL NEZNAMY .. UVIDIME PO VYPOCTOCH A TESTOCH#. Ak su nahodou v subore Merania chybne udaje (ine ako cisla) program danu bunku vysvieti na cerveno. Ak su v tabulke dva riadky vzajomnym skalarnym nasobkom budu oznacene rovnakou farbou (Ak je farba podobna vo viacerych pripadoch, stlac "Obnovit", farba sa nahodne meni).
+	  <div style="color: red"><b>Zachytne body mozno menit v tabulke priamo, zmeny sa odrazia na VYPOCTE ale nie na vstupnom subore. </b></div>
+	  </p>
+	  
+	  </li>
+	<li>
+	<h4>Vypocet</h4>
+	  <p>Spusta sa tlacitkom "Prepocitat" a vystupom je subor v rovnakom formate ako boli vstupy
+	  <div style="color: red"><b>Zachytne body mozno menit v tabulke priamo, zmeny sa odrazia na VYPOCTE ale nie na vstupnom subore. </b></div>
+	  </p>
+	  
+	  </li>
+      </ul> 
+	  </li>
+	  	  
+	  
+	  </ol>
+</body></html>
