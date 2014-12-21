@@ -100,8 +100,8 @@ class MainWindow(QWidget):
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
 
-        defaultFile1 = "proj.txt";
-        defaultFile2 = "mer.txt";
+        defaultFile1 = "proj_test.txt";
+        defaultFile2 = "merNativne_test.txt";
 
 
         self.set1 = set()
@@ -247,7 +247,7 @@ class MainWindow(QWidget):
                 prevRow = row
                 outText = outText+row+"\n"
                 cols = re.findall(r'[\w.-]+', row) # replaced row.split(" ") - working for multiple delimiters
-                print(cols)
+                #print(cols)
                 if len(cols) > 3:
                     setPts.add((cols[0],cols[1],cols[2],cols[3]))
 
@@ -259,7 +259,7 @@ class MainWindow(QWidget):
             item = self.ui.tableWidgetZachytne.item(row, col)
             for i in range(0,3):
                 if not self.is_number(item.text()):
-                    QMessageBox.warning(self, "Chyba vstupu", "Medzi zachytnymi bodmi v tabulke je neciselny vstup!\nRiadok: %s"  % item.row())
+                    QMessageBox.warning(self, "Chyba vstupu", "Medzi zachytnymi bodmi v tabulke je neciselny vstup!\nRiadok: %s"  % self.row2ID[row])
                     return False
                 if i == item.column():
                     tmpList.append(float64(item.text()))
@@ -420,7 +420,7 @@ class MainWindow(QWidget):
         selectionIDs = list()
         counter = 0;
         for item in self.ui.tableWidgetZachytne.selectedItems():
-            print("row %s" % item.row())
+            #print("row %s" % item.row())
             for i in range(0,3):
                 if not self.is_number(item.text()):
                     QMessageBox.warning(self, "Chyba vstupu", "Medzi zachytnymi bodmi v tabulke je neciselny vstup!\nRiadok: %s"  % item.row())
@@ -428,7 +428,7 @@ class MainWindow(QWidget):
                 if i == item.column():
                     print(float64(item.text()))
                     tmpList.append(float64(item.text()))
-            print("tmpList %s" % tmpList)
+            #print("tmpList %s" % tmpList)
             if len(tmpList) == 3:
                 self.vstup2.append(tmpList)
                 selectionIDs.append(self.row2ID[item.row()])
@@ -455,24 +455,24 @@ class MainWindow(QWidget):
                     tmpList = list()
                     
         pts1 = array(self.vstup1).reshape(counter,3)
-        print("fixne body z predlohy")
-        print(pts1)
+        #print("fixne body z predlohy")
+        #print(pts1)
         
         pts2 = array(self.vstup2).reshape(counter,3)
-        print("fixne body z merania")
-        print(pts2)
+        #print("fixne body z merania")
+        #print(pts2)
 
         pts2all = array(self.vstup2all).reshape(self.ui.tableWidgetZachytne.rowCount(),3)
-        print("toto vsetko pretransformujeme")
-        print(pts2all)
+        #print("toto vsetko pretransformujeme")
+        #print(pts2all)
         
        # try:
         # be aware of transformation direction : from 1 to 2
         # in our case we want the other way so the points need to be swapped
         transformation = self.t_svd(pts2, pts1)
         pts3 = self.transformPoints(pts2all, transformation['rot'], transformation['trl'])
-        print("vysledok")
-        print(pts3)
+        #print("vysledok")
+        #print(pts3)
         self.ui.lineEditChyba.setText(str(transformation['err']))
         cnt = 0
         for x in pts3:
@@ -502,9 +502,9 @@ class MainWindow(QWidget):
 
                 
     def alg_3_pts(self, A, B):
-        print ("A")
+        print("A")
         print(A)
-        print ("B")
+        print("B")
         print(B)
         a1 = array(A[0])
         a2 = array(A[1])
@@ -545,7 +545,7 @@ class MainWindow(QWidget):
         print(a2__)
         print(a3__)
         print("\n----\nR2 = rot_calc(dot(R,a_13),dot(R,b_13))")
-        R2 = self.rot_calc(dot(R,a_13),b_13)
+        R2 = self.rot2_calc( ( dot(R,a_13) - b_12),( b_13 - b_12 ) )
         print("verify R2+R.(A-tl) , dot(R,a@) == b@")
         a1___ = dot(R2,dot(R,a1_))
         a2___ = dot(R2,dot(R,a2_))
@@ -605,6 +605,41 @@ class MainWindow(QWidget):
         print(dot(R,a))
         return R
 
+
+    def rot2_calc(self, a, b):
+        print("vector a :")
+        print(a)
+        print("vector b :")
+        print(b)
+        print("unit vector au :")
+        au = a/linalg.norm(a)
+        print(au)
+        print("unit vector bu :")
+        bu = b/linalg.norm(b)
+        print(bu)
+        print("c = dot ( au, bu )")
+        c = dot( au, bu )
+        print (c)
+        print ("v = cross ( a, b )")
+        v = cross(au,bu,axis=0)
+        print(v)
+        print("s = ||v|| = norm ( v )")
+        s = linalg.norm(v)
+        print(s)
+        print ("vx = skew symmetric cross product of vector v")
+        vx = [[0,-v[2],v[1]],[v[2],0,-v[0]],[-v[1],v[0],0]]
+        print(vx)
+        print("R = (1-c)/power(s,2) * linalg.matrix_power(vx,2) + vx +  eye(3,3)")
+        R = (1-c)/power(s,2) * linalg.matrix_power(vx,2) + vx +  eye(3,3)
+        print(R)
+        print("verify R*au == bu")
+        print(dot(R,au))
+        print("verify R*a =aprox= b")
+        print(dot(R,a))
+        return R
+
+
+
     def t_svd(self, A, B):
 
         # function from : http://nbviewer.ipython.org/github/demotu/BMC/blob/master/notebooks/SVDalgorithm.ipynb
@@ -659,26 +694,26 @@ class MainWindow(QWidget):
     
     def transformPoints(self, ptsIn, rotation, translation):
         count = ptsIn.shape[0]
-        print("count")
-        print(count)
-        print("( ---------=  \n  vystupne bodiky")
+        #print("count")
+        #print(count)
+        #print("( ---------=  \n  vystupne bodiky")
         ptsOutList = list()
         for i in range(ptsIn.shape[0]):
             ptsOut = dot(rotation, ptsIn[i, :]) + translation
             ptsOutList.append(ptsOut)
-            print (ptsOutList)
+            #print (ptsOutList)
         return ptsOutList
 
     def transformPoints2(self, ptsIn, R, R2, translation):
         count = ptsIn.shape[0]
-        print("count")
-        print(count)
-        print("( ---------=  \n  vystupne bodiky")
+        #print("count")
+        #print(count)
+        #print("( ---------=  \n  vystupne bodiky")
         ptsOutList = list()
         for i in range(ptsIn.shape[0]):
             ptsOut = dot(R2, dot(R, ptsIn[i, :] + translation)) 
             ptsOutList.append(ptsOut)
-            print (ptsOutList)
+            #print (ptsOutList)
         return ptsOutList
                 
 if __name__ == '__main__':
